@@ -8,7 +8,6 @@ const replace = require('gulp-replace');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify');
-const browserSync = require('browser-sync').create();
 
 // file path variables
 const files = {
@@ -23,9 +22,8 @@ function sassTask() {
         .pipe(sass())
         .pipe(postcss([ autoprefixer(), cssnano() ]))
         .pipe(sourcemaps.write('.'))
-        .pipe(dest('dist'))
-        .pipe(browserSync.stream())
-    // );
+        .pipe(dest('dist')
+    );
 }
 
 // JS task
@@ -46,21 +44,10 @@ function cacheBustTask() {
     );
 }
 
-// Task to reaload the page
-function reload() {
-    browserSync.reload();
-}
-
 // Watch task
 function watchTask() {
-    browserSync.init({
-        server: {
-            baseDir: './'
-        }
-    })
     watch([files.sassPath, files.jsPath],
         parallel(sassTask, jsTask));
-    watch('*.html').on('change', browserSync.reload);
 }
 
 // Default task
