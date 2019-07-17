@@ -40,7 +40,7 @@ function jsTask() {
 // Cachebusting task
 const cbString = new Date().getTime();
 function cacheBustTask() {
-    return src(['index.html'])
+    return src(['index.php'])
         .pipe(replace(/cb=\d+/g, 'cb=' + cbString))
         .pipe(dest('.')
     );
@@ -53,14 +53,20 @@ function reload() {
 
 // Watch task
 function watchTask() {
+    // // Static server
+    // browserSync.init({
+    //     server: {
+    //         baseDir: './'
+    //     }
+    // })
+
+    // Xampp server
     browserSync.init({
-        server: {
-            baseDir: './'
-        }
+        proxy: 'gulp.test'
     })
     watch([files.sassPath, files.jsPath],
         parallel(sassTask, jsTask));
-    watch('*.html').on('change', browserSync.reload);
+    watch('*.php').on('change', browserSync.reload);
 }
 
 // Default task
